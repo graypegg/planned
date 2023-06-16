@@ -8,25 +8,24 @@
   },
   "scripts": {
     "start": "npm-run-all --parallel start:client start:server",
-    "start:client": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "start:client:prenode17": "react-scripts start",
+    "start:client": "react-scripts start",
     "start:server": "node server/server.js"
   },
   "dependencies": {
     "faker": "^4.1.0",
     "fastify": "^2.14.1",
     "fastify-cors": "^3.0.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "styled-components": "^5.1.1",
-    "typescript": "^3.9.5"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.11",
+    "typescript": "^4"
   },
   "devDependencies": {
-    "@types/node": "^14.0.11",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
-    "@types/styled-components": "^5.1.0",
+    "@types/node": "^20.3.1",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.2.5",
+    "@types/styled-components": "^5.1.26",
     "npm-run-all": "^4.1.5"
   },
   "eslintConfig": {
