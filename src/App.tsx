@@ -12,8 +12,8 @@ function App() {
       </div>
       <div>
         <h2>Users</h2>
-        min: <input name="minAge" value="0" type="number" />
-        max: <input name="maxAge" value="100" type="number" />
+        min: <input name="minAge" defaultValue="0" type="number" />
+        max: <input name="maxAge" defaultValue="100" type="number" />
         <button type="button">Filter by age</button>
       </div>
     </div>
