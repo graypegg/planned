@@ -1,4 +1,4 @@
-import {UserFilters} from "./users";
+import {UserFilters} from "../hooks/useUsers";
 import {User} from "./user";
 
 export interface Fetcher {

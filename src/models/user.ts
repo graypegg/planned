@@ -29,8 +29,8 @@ export class User implements JSONUserResponse {
 
     if (nameComparisonResult === ComparisonResult.A_SAME_AS_B) {
       const diff = this.age - other.age
-      if (diff > 0) return ComparisonResult.A_HIGHER_THAN_B
-      if (diff < 0) return ComparisonResult.A_LOWER_THAN_B
+      if (diff > 0) return ComparisonResult.A_LOWER_THAN_B
+      if (diff < 0) return ComparisonResult.A_HIGHER_THAN_B
       return ComparisonResult.A_SAME_AS_B
     }
 

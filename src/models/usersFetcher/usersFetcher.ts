@@ -1,6 +1,6 @@
-import {Fetcher} from "./fetcher";
-import {UserFilters} from "./users";
-import {User, JSONUserResponse} from "./user";
+import {Fetcher} from "../fetcher";
+import {UserFilters} from "../../hooks/useUsers";
+import {User, JSONUserResponse} from "../user";
 
 interface JSONUsersResponse {
   data: JSONUserResponse[]

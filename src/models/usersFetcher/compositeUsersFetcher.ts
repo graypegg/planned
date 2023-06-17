@@ -1,6 +1,6 @@
-import {Fetcher} from "./fetcher";
-import {UserFilters} from "./users";
-import {User} from "./user";
+import {Fetcher} from "../fetcher";
+import {UserFilters} from "../../hooks/useUsers";
+import {User} from "../user";
 
 export class CompositeUsersFetcher implements Fetcher {
   constructor(private fetchers: Fetcher[]) {

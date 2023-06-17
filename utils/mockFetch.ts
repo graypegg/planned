@@ -63,6 +63,8 @@ export const allAdultsResponse = {
     })
   }
 }
+
+/** /users/seniors endpoint returns a malformed object. Emulating that here */
 export const allSeniorsResponse = {
   json () {
     return Promise.resolve([
