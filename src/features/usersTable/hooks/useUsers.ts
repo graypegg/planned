@@ -1,16 +1,8 @@
 import {useEffect, useMemo, useState} from "react";
 import {UsersFetcher} from "../models/usersFetcher/usersFetcher";
-import {CompositeUsersFetcher} from "../models/usersFetcher/compositeUsersFetcher";
 import {MalformedUsersFetcher} from "../models/usersFetcher/malformedUsersFetcher";
+import {CompositeUsersFetcher} from "../models/usersFetcher/compositeUsersFetcher";
 import {User} from "../models/user";
-
-export interface UserFilters {
-  age: {
-    min: number,
-    max: number
-  },
-  textFilter: string
-}
 
 function getFetcher () {
   const kidsFetcher = new UsersFetcher('kids')
@@ -40,4 +32,12 @@ export function useUsers(filters: UserFilters) {
   }, [filters.textFilter, filters.age.max, filters.age.min])
 
   return {users, isLoading, error}
+}
+
+export interface UserFilters {
+  age: {
+    min: number,
+    max: number
+  },
+  textFilter: string
 }

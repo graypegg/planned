@@ -40,4 +40,8 @@ export class User implements JSONUserResponse {
   getFullName() {
     return `${this.name.firstName} ${this.name.lastName}`;
   }
+
+  uniqueId() {
+    return this.getFullName() + this.age
+  }
 }
