@@ -3,7 +3,14 @@ import {render, screen} from '@testing-library/react'
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom'
 import {Mock} from "vitest";
-import {allAdultsResponse, allKidsResponse, allSeniorsResponse, mockFetch, unmockFetch} from "../../utils/mockFetch";
+import {
+  allAdultsResponse,
+  allKidsResponse,
+  allSeniorsResponse,
+  mockFetch, oldAric,
+  unmockFetch,
+  youngAric
+} from "../../utils/mockFetch";
 
 import {UsersPage} from "./users";
 
@@ -60,6 +67,25 @@ describe('Users Page', () => {
 
       expect(tableNames.length).toBe(5)
       expect(mockedFetch).toHaveBeenCalledTimes(3)
+    })
+
+    it('should order list by name (a-z) first, then age (old-young)', () => {
+      mockedFetch.mockImplementation((url) => {
+        if (url.includes('/users/kids')) return allKidsResponse
+        if (url.includes('/users/adults')) return allAdultsResponse
+        if (url.includes('/users/seniors')) return allSeniorsResponse
+      })
+
+      render(
+        <UsersPage></UsersPage>
+      )
+
+      const tableNames = screen.getAllByLabelText('Name')
+      const youngAricName = screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)
+      const oldAricName = screen.getByText(`${oldAric.name.firstName} ${oldAric.name.lastName}`)
+
+      expect(tableNames[0]).toEqual(youngAricName)
+      expect(tableNames[1]).toEqual(oldAricName)
     })
   })
 })

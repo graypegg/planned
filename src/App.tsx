@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useUsers} from "./models/users";
 
 const API_URL = 'http://localhost:8099'
 
 function App() {
+  const {users} = useUsers({age: {max: 0, min: 0}, textFilter: ""})
   return (
     <div className="App">
       <h1>Planned Test</h1>
