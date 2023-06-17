@@ -1,8 +1,9 @@
 import {Fetcher} from "./fetcher";
-import {User, UserFilters} from "./users";
+import {UserFilters} from "./users";
+import {User, JSONUserResponse} from "./user";
 
-interface UsersResponse {
-  data: User[]
+interface JSONUsersResponse {
+  data: JSONUserResponse[]
 }
 
 export class UsersFetcher implements Fetcher {
@@ -11,22 +12,23 @@ export class UsersFetcher implements Fetcher {
 
   constructor(private readonly type: string) {}
 
-  fetch(filters: UserFilters) {
+  startFetchTask(filters: UserFilters) {
     const abortController = new AbortController()
 
     if (this.cache) {
       return {
-        userList: Promise.resolve(this.cache),
+        promise: Promise.resolve(this.cache),
         controller: abortController
       }
     }
 
     const userList = fetch(this.makeUrl(), {signal: abortController.signal})
       .then(this.unpackResponse)
-      .then(this.cacheStore)
+      .then(this.castUsers)
+      .then(this.cacheStore.bind(this))
 
     return {
-      userList,
+      promise: userList,
       controller: abortController
     }
   }
@@ -41,7 +43,11 @@ export class UsersFetcher implements Fetcher {
   }
 
   protected async unpackResponse(response: Response) {
-    const object = await response.json() as UsersResponse
+    const object = await response.json() as JSONUsersResponse
     return object.data
+  }
+
+  protected castUsers(singletonUsers: JSONUserResponse[]) {
+    return singletonUsers.map(singletonUser => new User(singletonUser))
   }
 }

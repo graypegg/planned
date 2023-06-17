@@ -40,24 +40,23 @@ describe('Users', () => {
         expect(mockedFetch).toHaveBeenCalledTimes(3)
       })
 
-      it('should cache results and not call again if params are not changes', () => {
+      it('should cache results and not call again if params are not changes', async () => {
         const hook = renderHook(() => useUsers(defaultFilters))
         hook.rerender()
-        expect(mockedFetch).toHaveBeenCalledTimes(3)
+        await waitFor(() => expect(mockedFetch).toHaveBeenCalledTimes(3))
       })
     })
 
     it('should order results by name ascending followed by age descending', async () => {
       const hook = renderHook(() => useUsers(defaultFilters))
-      await waitFor(() => {
-        expect(hook.result.current.users).toEqual([
-          youngAric,
-          oldAric,
-          belle,
-          danny,
-          graham
-        ])
-      })
+      await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+      expect(hook.result.current.users).toEqual([
+        youngAric,
+        oldAric,
+        belle,
+        danny,
+        graham
+      ])
     })
   })
 })

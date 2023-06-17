@@ -65,12 +65,10 @@ export const allAdultsResponse = {
 }
 export const allSeniorsResponse = {
   json () {
-    return Promise.resolve({
-      data: [
+    return Promise.resolve([
         belle,
         oldAric
-      ]
-    })
+    ])
   }
 }
 

@@ -1,5 +1,5 @@
 import {UsersFetcher} from "./usersFetcher";
-import {User} from "./users";
+import {User} from "./user";
 
 type MalformedUsersResponse = User[]
 

@@ -1,8 +1,9 @@
-import {User, UserFilters} from "./users";
+import {UserFilters} from "./users";
+import {User} from "./user";
 
 export interface Fetcher {
-  fetch(filters: UserFilters): {
-    userList: Promise<User[]>,
+  startFetchTask(filters: UserFilters): {
+    promise: Promise<User[]>,
     controller: { abort(): void }
   }
 }
