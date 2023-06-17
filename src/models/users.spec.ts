@@ -1,62 +1,63 @@
-import {UserList} from "./users";
-import {waitFor} from "@testing-library/dom";
+import {renderHook, waitFor} from "@testing-library/react"
+import {UserFilters, useUsers} from "./users"
 import {
-  allAdultsResponse,
-  allKidsResponse,
-  allSeniorsResponse, belle, danny, graham,
-  mockFetch,
+  belle,
+  danny,
+  graham,
   oldAric,
-  youngAric
-} from "../../utils/mockFetch";
-import {mock} from "node:test";
+  youngAric,
+  allKidsResponse,
+  allAdultsResponse,
+  allSeniorsResponse,
+  mockFetch,
+} from "../../utils/mockFetch"
 
-describe('UserList', () => {
-  it('should start with an empty list and be loading', () => {
-    const list = new UserList()
-    expect(list.isLoading).toBeTruthy()
-    expect(list.users).toEqual([])
+const defaultFilters: UserFilters = {
+  age: {max: 0, min: 100},
+  textFilter: ""
+}
+
+describe('Users', () => {
+  let mockedFetch: ReturnType<typeof mockFetch>;
+
+  beforeEach(() => {
+    mockedFetch = mockFetch()
+    mockedFetch.mockImplementation(url => {
+      if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
+      if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
+      if (url.includes('users/seniors')) { return Promise.resolve(allSeniorsResponse) }
+    })
   })
 
-  it('should request all three endpoints at first', async () => {
-    const mockedFetch = mockFetch()
-    mockedFetch.mockImplementation((url) => {
-      if (url.includes('/users/kids')) return allKidsResponse
-      if (url.includes('/users/adults')) return allAdultsResponse
-      if (url.includes('/users/seniors')) return allSeniorsResponse
+  describe('useUsers hook', () => {
+    describe('network activity', () => {
+      beforeEach(() => {
+        vi.spyOn(global, 'fetch')
+      })
+
+      it('should request from 3 endpoints', () => {
+        renderHook(() => useUsers(defaultFilters))
+        expect(mockedFetch).toHaveBeenCalledTimes(3)
+      })
+
+      it('should cache results and not call again if params are not changes', () => {
+        const hook = renderHook(() => useUsers(defaultFilters))
+        hook.rerender()
+        expect(mockedFetch).toHaveBeenCalledTimes(3)
+      })
     })
 
-    const list = new UserList()
-    await waitFor(() => expect(list.isLoading).toBeFalsy())
-    expect(mockedFetch).toHaveBeenCalledTimes(3)
-    expect(mockedFetch).toHaveBeenCalledWith(expect.stringContaining(`/users/kids`))
-    expect(mockedFetch).toHaveBeenCalledWith(expect.stringContaining(`/users/adults`))
-    expect(mockedFetch).toHaveBeenCalledWith(expect.stringContaining(`/users/seniors`))
-    expect(list.users).toEqual(expect.arrayContaining([
-      graham,
-      youngAric,
-      oldAric,
-      belle,
-      danny
-    ]))
-  })
-
-  it('should always order users by name (a-z) first, and age (old-young) second', async () => {
-    const mockedFetch = mockFetch()
-    mockedFetch.mockImplementation((url) => {
-      if (url.includes('/users/kids')) return allKidsResponse
-      if (url.includes('/users/adults')) return allAdultsResponse
-      if (url.includes('/users/seniors')) return allSeniorsResponse
+    it('should order results by name ascending followed by age descending', async () => {
+      const hook = renderHook(() => useUsers(defaultFilters))
+      await waitFor(() => {
+        expect(hook.result.current.users).toEqual([
+          youngAric,
+          oldAric,
+          belle,
+          danny,
+          graham
+        ])
+      })
     })
-
-    const list = new UserList()
-    list.refresh()
-    await waitFor(() => expect(list.isLoading).toBeFalsy())
-    expect(list.users).toEqual([
-      oldAric,
-      youngAric,
-      belle,
-      danny,
-      graham
-    ])
   })
 })
