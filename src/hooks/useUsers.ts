@@ -1,8 +1,8 @@
 import {useEffect, useMemo, useState} from "react";
-import {UsersFetcher} from "./usersFetcher";
-import {CompositeUsersFetcher} from "./compositeUsersFetcher";
-import {MalformedUsersFetcher} from "./malformedUsersFetcher";
-import {User} from "./user";
+import {UsersFetcher} from "../models/usersFetcher/usersFetcher";
+import {CompositeUsersFetcher} from "../models/usersFetcher/compositeUsersFetcher";
+import {MalformedUsersFetcher} from "../models/usersFetcher/malformedUsersFetcher";
+import {User} from "../models/user";
 
 export interface UserFilters {
   age: {

@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from "@testing-library/react"
-import {UserFilters, useUsers} from "./users"
+import {UserFilters, useUsers} from "./useUsers"
 import {
   belle,
   danny,
@@ -51,8 +51,8 @@ describe('Users', () => {
       const hook = renderHook(() => useUsers(defaultFilters))
       await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
       expect(hook.result.current.users).toEqual([
-        youngAric,
         oldAric,
+        youngAric,
         belle,
         danny,
         graham
