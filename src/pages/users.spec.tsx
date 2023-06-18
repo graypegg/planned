@@ -140,6 +140,8 @@ describe('Users Page', () => {
       await userEvent.type(maxField, '999')
       await userEvent.click(retrieveUsersButton)
 
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+
       const rows = screen.getAllByRole('row')
       const expectedNumberOfHeaders = 1
       const expectedNumberOfRows = 0

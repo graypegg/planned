@@ -12,7 +12,7 @@ export function UsersTableFilters({onChange}: UsersTableFiltersProps) {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
 
-  useEffect(() => {
+  function handleRetrieveUsers () {
     onChange({
       age: {
         min,
@@ -20,7 +20,7 @@ export function UsersTableFilters({onChange}: UsersTableFiltersProps) {
       },
       textFilter: ''
     })
-  }, [min, max, onChange])
+  }
 
   return (
     <div>
@@ -40,7 +40,7 @@ export function UsersTableFilters({onChange}: UsersTableFiltersProps) {
         onChange={event => setMax(parseInt(event.target.value))}
         type="number"/>
 
-      <button type="button">Retrieve Users</button>
+      <button onClick={handleRetrieveUsers} type="button">Retrieve Users</button>
     </div>
   );
 }
