@@ -2,15 +2,16 @@ import React, {useEffect, useId, useState} from "react";
 import {UserFilters} from "./hooks/useUsers";
 
 interface UsersTableFiltersProps {
+  filters: UserFilters,
   onChange(usersFilters: UserFilters): void
 }
 
-export function UsersTableFilters({onChange}: UsersTableFiltersProps) {
+export function UsersTableFilters({filters, onChange}: UsersTableFiltersProps) {
   const minFieldId = useId();
   const maxFieldId = useId();
 
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(100);
+  const [min, setMin] = useState(filters.age.min);
+  const [max, setMax] = useState(filters.age.max);
 
   function handleRetrieveUsers () {
     onChange({

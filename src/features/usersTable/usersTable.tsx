@@ -43,7 +43,7 @@ export function UsersTable() {
 
   return (
     <div>
-      <UsersTableFilters onChange={setFilters}/>
+      <UsersTableFilters filters={filters} onChange={setFilters}/>
       <UsersTableView isLoading={isLoading} error={error} users={users}/>
     </div>
   );

@@ -14,28 +14,28 @@ export class UsersFetcher implements Fetcher {
 
   startFetchTask(filters: UserFilters) {
     const abortController = new AbortController()
-
-    if (this.cache) {
-      return {
-        promise: Promise.resolve(this.cache),
-        controller: abortController
-      }
-    }
-
-    const userList = fetch(this.makeUrl(), {signal: abortController.signal})
-      .then(this.unpackResponse)
-      .then(this.castUsers)
-      .then(this.cacheStore.bind(this))
+    const usersList = this.requestOrUncacheUserList(abortController)
+    const filteredUserList = usersList.then(usersList => this.applyFilter(filters, usersList))
 
     return {
-      promise: userList,
+      promise: filteredUserList,
       controller: abortController
     }
   }
 
-  protected cacheStore(userList: User[]): User[] {
-    this.cache = userList
-    return userList
+  protected applyFilter(filters: UserFilters, usersList: User[]) {
+    return usersList.filter(user => {
+      return (filters.age.min <= user.age) && (filters.age.max >= user.age) && (user.getFullName().includes(filters.textFilter))
+    })
+  }
+
+  protected requestOrUncacheUserList(abortController: AbortController) {
+    if (this.cache) return Promise.resolve(this.cache)
+
+    return fetch(this.makeUrl(), {signal: abortController.signal})
+      .then(this.unpackResponse)
+      .then(this.castUsers)
+      .then(this.cacheStore.bind(this))
   }
 
   protected makeUrl() {
@@ -49,5 +49,10 @@ export class UsersFetcher implements Fetcher {
 
   protected castUsers(singletonUsers: JSONUserResponse[]) {
     return singletonUsers.map(singletonUser => new User(singletonUser))
+  }
+
+  protected cacheStore(userList: User[]): User[] {
+    this.cache = userList
+    return userList
   }
 }
