@@ -53,7 +53,7 @@ describe('Users Page', () => {
       unmockFetch()
     })
 
-    it('should show a full list of users by default', async () => {
+    it('should not show a full list of users by default', async () => {
       mockedFetch.mockImplementation((url) => {
         if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
         if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
@@ -64,14 +64,40 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
 
       const rows = screen.getAllByRole('row')
 
       const expectedNumberOfHeaders = 1
-      const expectedNumberOfRows = 5
+      const expectedNumberOfRows = 0
 
       expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows)
+      expect(mockedFetch).toHaveBeenCalledTimes(0)
+    })
+
+    it('should request all endpoints and update table the first time the retrieve users button is clicked', async () => {
+      mockedFetch.mockImplementation((url) => {
+        if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
+        if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
+        if (url.includes('users/seniors')) { return Promise.resolve(allSeniorsResponse) }
+      })
+
+      render(
+        <UsersPage></UsersPage>
+      )
+
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+
+      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
+      await userEvent.click(retrieveUsersButton)
+
+      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
+
+      const rows = screen.getAllByRole('row')
+      const expectedNumberOfHeaders = 1
+      const expectedNumberOfRows = 5
+
+      await waitFor(() => expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows))
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
 
@@ -85,6 +111,11 @@ describe('Users Page', () => {
       render(
         <UsersPage></UsersPage>
       )
+
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+
+      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
+      await userEvent.click(retrieveUsersButton)
 
       await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
@@ -104,6 +135,11 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+
+      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
+      await userEvent.click(retrieveUsersButton)
+
       await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const minField = screen.getByLabelText<HTMLInputElement>('Min')
@@ -119,7 +155,7 @@ describe('Users Page', () => {
       expect(rowsAfterChange.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows)
     })
 
-    it('should update the table but not refresh the models when the form is submitted', async () => {
+    it('should update the table but not refresh the models when the form is submitted a second time', async () => {
       mockedFetch.mockImplementation((url) => {
         if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
         if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
@@ -130,11 +166,15 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
+      await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+
+      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
+      await userEvent.click(retrieveUsersButton)
+
       await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const minField = screen.getByLabelText<HTMLInputElement>('Min')
       const maxField = screen.getByLabelText<HTMLInputElement>('Max')
-      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
 
       await userEvent.type(minField, '99')
       await userEvent.type(maxField, '999')

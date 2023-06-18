@@ -41,12 +41,14 @@ describe('useUsers hook', () => {
     })
 
     it('should request from 3 endpoints', () => {
-      renderHook(() => useUsers(defaultFilters))
+      const hook = renderHook(() => useUsers())
+      hook.result.current.refresh(defaultFilters)
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
 
     it('should cache results and not call again during the next rerender', async () => {
-      const hook = renderHook(() => useUsers(defaultFilters))
+      const hook = renderHook(() => useUsers())
+      hook.result.current.refresh(defaultFilters)
       await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
 
       hook.rerender({
@@ -60,7 +62,8 @@ describe('useUsers hook', () => {
   })
 
   it('should order results by name ascending followed by age descending', async () => {
-    const hook = renderHook(() => useUsers(defaultFilters))
+    const hook = renderHook(() => useUsers())
+    hook.result.current.refresh(defaultFilters)
     await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
     expect(hook.result.current.users).toEqual([
       oldAric,
