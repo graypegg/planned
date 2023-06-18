@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, waitFor, within} from '@testing-library/react'
+import {render, screen, waitFor} from '@testing-library/react'
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom'
 import {Mock} from "vitest";
@@ -26,7 +26,11 @@ function mockFetchWithDefaultResponses(mockedFetch: Mock) {
 }
 
 async function waitForTableToBeOnScreen() {
-  await waitFor(() => expect(screen.getByText(`Name`)).toBeVisible())
+  await waitFor(() => expect(screen.getByRole(`table`)).toBeVisible())
+}
+
+async function waitForEmptyStateToBeOnScreen() {
+  await waitFor(() => expect(screen.getByText(`No users retrieved.`)).toBeVisible())
 }
 
 async function clickRetrieveUsersButton() {
@@ -85,14 +89,7 @@ describe('Users Page', () => {
       render(
         <UsersPage></UsersPage>
       )
-      await waitForTableToBeOnScreen();
-
-      const rows = screen.getAllByRole('row')
-
-      const expectedNumberOfHeaders = 1
-      const expectedNumberOfRows = 0
-
-      expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows)
+      await waitForEmptyStateToBeOnScreen();
       expect(mockedFetch).toHaveBeenCalledTimes(0)
     })
 
@@ -101,7 +98,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitForTableToBeOnScreen();
+      await waitForEmptyStateToBeOnScreen();
       await clickRetrieveUsersButton();
       await waitForUserRowToBeOnScreen(graham);
 
@@ -118,7 +115,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitForTableToBeOnScreen();
+      await waitForEmptyStateToBeOnScreen();
       await clickRetrieveUsersButton();
       await waitForUserRowToBeOnScreen(youngAric);
       await waitForUserRowToBeOnScreen(oldAric);
@@ -133,7 +130,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitForTableToBeOnScreen();
+      await waitForEmptyStateToBeOnScreen();
       await clickRetrieveUsersButton();
       await waitForUserRowToBeOnScreen(graham);
 
@@ -155,7 +152,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitForTableToBeOnScreen();
+      await waitForEmptyStateToBeOnScreen();
       await clickRetrieveUsersButton();
       await waitForUserRowToBeOnScreen(graham);
 
@@ -166,13 +163,8 @@ describe('Users Page', () => {
       await userEvent.type(maxField, '999')
 
       await clickRetrieveUsersButton();
-      await waitForTableToBeOnScreen();
+      await waitForEmptyStateToBeOnScreen();
 
-      const rows = screen.getAllByRole('row')
-      const expectedNumberOfHeaders = 1
-      const expectedNumberOfRows = 0
-
-      await waitFor(() => expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows))
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
   })
