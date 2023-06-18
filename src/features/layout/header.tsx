@@ -19,7 +19,7 @@ const StyledHeader = styled.header`
 export function Header() {
   return (
     <StyledHeader>
-      <img src="https://placekitten.com/60/60" />
+      <img src="https://placekitten.com/60/60"  alt="A place holder kitten"/>
       <h1>Planned test</h1>
     </StyledHeader>
   );

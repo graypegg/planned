@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {UsersFetcher} from "../models/usersFetcher/usersFetcher";
 import {MalformedUsersFetcher} from "../models/usersFetcher/malformedUsersFetcher";
 import {CompositeUsersFetcher} from "../models/usersFetcher/compositeUsersFetcher";
@@ -35,7 +35,7 @@ export function useUsers() {
       .finally(() => setIsLoading(false))
 
     return () => fetchTask.controller.abort()
-  }, [])
+  }, [fetcher])
 
   return {refresh, users, isLoading, error}
 }
