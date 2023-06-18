@@ -7,7 +7,7 @@ import {Fetcher} from "../models/fetcher";
 
 /**
  * Generate a new fetcher object (fetch wrapper with caching + cancelability) for this component.
- * This could be in a context if this was a real app, so we share a cache for a session
+ * This could be in a context if this was a real app, so we share a cache for a session.
  */
 function getFetcher (): Fetcher {
   const kidsFetcher = new UsersFetcher('kids')

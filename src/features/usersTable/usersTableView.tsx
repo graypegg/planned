@@ -23,6 +23,15 @@ const StyledTable = styled.table`
   }
 `
 
+const StyledNote = styled.strong`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: ${({theme}) => theme.textLight};
+  font-weight: normal;
+`
+
 interface UsersTableViewProps {
   isLoading: boolean;
   error: Error | null;
@@ -32,7 +41,7 @@ interface UsersTableViewProps {
 export function UsersTableView({isLoading, error, users}: UsersTableViewProps) {
   return (
     <Sheet>
-      {!isLoading && !error && (
+      {!isLoading && !error && users.length > 0 && (
         <StyledTable>
           <thead>
           <tr>
@@ -52,11 +61,14 @@ export function UsersTableView({isLoading, error, users}: UsersTableViewProps) {
           </tbody>
         </StyledTable>
       )}
+      {!isLoading && !error && users.length === 0 && (
+        <StyledNote>No users retrieved.</StyledNote>
+      )}
       {isLoading && (
-        <strong>Loading...</strong>
+        <StyledNote>Loading...</StyledNote>
       )}
       {error && (
-        <strong>An error occurred</strong>
+        <StyledNote>An error occurred</StyledNote>
       )}
     </Sheet>
   );

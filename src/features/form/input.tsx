@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StyledLabel = styled.label`
   flex: 0 0 47px;
   padding-left: 15px;
-  color: #858d9a;
+  color: ${({theme}) => theme.textLight};
 `
 
 const StyledInput = styled.input`
@@ -14,13 +14,14 @@ const StyledInput = styled.input`
   background: none;
   padding-right: 15px;
   padding-left: 1ch;
+  color: ${({theme}) => theme.text};
 `
 
 const StyledInputContainer = styled.div`
   flex: 1 1 100%;
   display: flex;
   gap: 10px;
-  border: solid 1px rgb(211, 216, 224);
+  border: solid 1px ${({theme}) => theme.border};
   border-radius: 6px;
 
   ${StyledLabel},

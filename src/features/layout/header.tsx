@@ -5,7 +5,7 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: #FFFFFF;
+  background: ${({theme}) => theme.bright};
 
   & > * {
     margin: 0;

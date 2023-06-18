@@ -2,15 +2,15 @@ import React, {MouseEventHandler, PropsWithChildren} from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  color: #FFFFFF;
-  background: rgba(82, 162, 126);
+  color: ${({theme}) => theme.bright};
+  background: ${({theme}) => theme.primary};
   border: none;
   padding: 15px;
   border-radius: 25px;
   cursor: pointer;
 
   &:hover {
-    background: rgb(45, 91, 68);
+    background: ${({theme}) => theme.primaryDark};
   }
 `
 
