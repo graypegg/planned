@@ -1,5 +1,6 @@
 import React, {useEffect, useId, useState} from "react";
 import {UserFilters} from "./hooks/useUsers";
+import {Sheet} from "../layout/sheet";
 
 interface UsersTableFiltersProps {
   filters: UserFilters,
@@ -24,7 +25,7 @@ export function UsersTableFilters({filters, onChange}: UsersTableFiltersProps) {
   }
 
   return (
-    <div>
+    <Sheet>
       <label htmlFor={minFieldId}>Min</label>
       <input
         id={minFieldId}
@@ -42,6 +43,6 @@ export function UsersTableFilters({filters, onChange}: UsersTableFiltersProps) {
         type="number"/>
 
       <button onClick={handleRetrieveUsers} type="button">Retrieve Users</button>
-    </div>
+    </Sheet>
   );
 }

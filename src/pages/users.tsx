@@ -1,13 +1,13 @@
 import React from "react";
 import {UsersTable} from "../features/usersTable/usersTable";
-import {Header} from "../features/layout/header";
+import {Main} from "../features/layout/main";
 
 export function UsersPage() {
-
   return (
-    <>
-      <Header/>
+    <Main heading={
+      <h2>Users</h2>
+    }>
       <UsersTable/>
-    </>
+    </Main>
   );
 }
