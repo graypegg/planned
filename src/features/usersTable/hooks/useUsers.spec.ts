@@ -1,4 +1,4 @@
-import {renderHook, waitFor} from "@testing-library/react"
+import {act, renderHook, RenderHookResult, waitFor} from "@testing-library/react"
 import {UserFilters, useUsers} from "./useUsers"
 import {
   belle,
@@ -15,6 +15,10 @@ import {
 const defaultFilters: UserFilters = {
   age: {max: 100, min: 0},
   textFilter: ""
+}
+
+async function waitForHookToStopLoading(hook: RenderHookResult<ReturnType<typeof useUsers>, Parameters<typeof useUsers>>) {
+  await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
 }
 
 describe('useUsers hook', () => {
@@ -40,22 +44,24 @@ describe('useUsers hook', () => {
       vi.spyOn(global, 'fetch')
     })
 
-    it('should request from 3 endpoints', () => {
+    it('should request from 3 endpoints', async () => {
       const hook = renderHook(() => useUsers())
-      hook.result.current.refresh(defaultFilters)
+      await act(() => hook.result.current.refresh(defaultFilters))
+      await waitForHookToStopLoading(hook);
+
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
 
     it('should cache results and not call again during the next rerender', async () => {
       const hook = renderHook(() => useUsers())
-      hook.result.current.refresh(defaultFilters)
-      await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+      await act(() => hook.result.current.refresh(defaultFilters))
+      await waitForHookToStopLoading(hook);
 
-      hook.rerender({
+      await act(() => hook.result.current.refresh({
         ...defaultFilters,
         textFilter: 'ailurus fulgens'
-      })
-      await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+      }))
+      await waitForHookToStopLoading(hook);
 
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
@@ -63,8 +69,9 @@ describe('useUsers hook', () => {
 
   it('should order results by name ascending followed by age descending', async () => {
     const hook = renderHook(() => useUsers())
-    hook.result.current.refresh(defaultFilters)
-    await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+    await act(() => hook.result.current.refresh(defaultFilters))
+    await waitForHookToStopLoading(hook);
+
     expect(hook.result.current.users).toEqual([
       oldAric,
       youngAric,
