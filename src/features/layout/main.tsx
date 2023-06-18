@@ -2,7 +2,7 @@ import React, {PropsWithChildren, ReactNode} from "react";
 import styled from "styled-components";
 
 const StyledMain = styled.main`
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 2rem auto 0;
   padding: 0 30px 2rem;
   display: grid;
@@ -13,7 +13,13 @@ const StyledMain = styled.main`
     'heading heading'
     'aside content';
 
-  @media (width <= 1630px) {
+  @media (width <= 900px) {
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'heading'
+      'aside'
+      'content';
   }
 
   & > header {

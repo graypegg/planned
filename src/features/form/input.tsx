@@ -2,8 +2,9 @@ import React, {useId} from "react";
 import styled from "styled-components";
 
 const StyledLabel = styled.label`
-  flex: 1 0 30px;
+  flex: 0 0 47px;
   padding-left: 15px;
+  color: #858d9a;
 `
 
 const StyledInput = styled.input`

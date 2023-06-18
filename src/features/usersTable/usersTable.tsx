@@ -1,44 +1,7 @@
-import {User} from "./models/user";
 import React, {useState} from "react";
 import {UsersTableFilters} from "./usersTableFilters";
 import {UserFilters, useUsers} from "./hooks/useUsers";
-import {Sheet} from "../layout/sheet";
-
-interface UsersTableViewProps {
-  isLoading: boolean;
-  error: Error | null;
-  users: User[];
-}
-
-function UsersTableView({isLoading, error, users}: UsersTableViewProps) {
-  return (
-    <Sheet>
-      {!isLoading && !error && (
-        <table>
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-          </tr>
-          </thead>
-          <tbody>
-          {
-            users.map(user => (
-              <tr key={user.uniqueId()}>
-                <td>{user.getFullName()}</td>
-                <td>{user.age}</td>
-              </tr>
-            ))
-          }
-          </tbody>
-        </table>
-      )}
-      {isLoading && (
-        <strong>Loading...</strong>
-      )}
-    </Sheet>
-  );
-}
+import {UsersTableView} from "./usersTableView";
 
 export function UsersTable() {
   const [filters, setFilters] = useState<UserFilters>({age: {max: 100, min: 0}, textFilter: ""})
@@ -46,7 +9,9 @@ export function UsersTable() {
 
   return (
     <>
-      <UsersTableFilters filters={filters} onChange={setFilters}/>
+      <aside>
+        <UsersTableFilters filters={filters} onChange={setFilters}/>
+      </aside>
       <UsersTableView isLoading={isLoading} error={error} users={users}/>
     </>
   );

@@ -1,6 +1,8 @@
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #0e262c;
+  background: #F4F6F8;
 }
 
 * {
