@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, {FormEventHandler, MouseEventHandler, ReactElement} from "react";
+import React, {FormEventHandler, ReactElement} from "react";
 
 const StyledForm = styled.form`
   display: grid;
