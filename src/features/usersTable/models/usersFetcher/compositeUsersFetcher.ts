@@ -13,13 +13,15 @@ export class CompositeUsersFetcher implements Fetcher {
       fetchTasks.forEach(task => task.controller.abort())
     }
 
-    const userList = Promise.all(fetchTasks.map(task => task.promise))
+    const userList = Promise.all(
+      fetchTasks.map(task => task.promise)
+    )
       .then(this.flattenUserLists)
       .then(this.sortUsers)
 
     return {
       promise: userList,
-      controller: { abort }
+      controller: {abort}
     }
   }
 

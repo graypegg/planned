@@ -13,7 +13,7 @@ import {
 } from "../../../../utils/mockFetch"
 
 const defaultFilters: UserFilters = {
-  age: {max: 0, min: 100},
+  age: {max: 100, min: 0},
   textFilter: ""
 }
 
@@ -34,6 +34,7 @@ describe('useUsers hook', () => {
       }
     })
   })
+
   describe('network activity', () => {
     beforeEach(() => {
       vi.spyOn(global, 'fetch')
@@ -46,8 +47,14 @@ describe('useUsers hook', () => {
 
     it('should cache results and not call again during the next rerender', async () => {
       const hook = renderHook(() => useUsers(defaultFilters))
-      hook.rerender()
       await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+
+      hook.rerender({
+        ...defaultFilters,
+        textFilter: 'ailurus fulgens'
+      })
+      await waitFor(() => expect(hook.result.current.isLoading).toBeFalsy())
+
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
   })

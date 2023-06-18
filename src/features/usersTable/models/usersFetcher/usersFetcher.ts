@@ -14,7 +14,7 @@ export class UsersFetcher implements Fetcher {
 
   startFetchTask(filters: UserFilters) {
     const abortController = new AbortController()
-    const usersList = this.requestOrUncacheUserList(abortController)
+    const usersList = this.requestOrUncacheUsersList(abortController)
     const filteredUserList = usersList.then(usersList => this.applyFilter(filters, usersList))
 
     return {
@@ -29,7 +29,7 @@ export class UsersFetcher implements Fetcher {
     })
   }
 
-  protected requestOrUncacheUserList(abortController: AbortController) {
+  protected requestOrUncacheUsersList(abortController: AbortController) {
     if (this.cache) return Promise.resolve(this.cache)
 
     return fetch(this.makeUrl(), {signal: abortController.signal})
