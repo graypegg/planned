@@ -6,7 +6,7 @@ import {Mock} from "vitest";
 import {
   allAdultsResponse,
   allKidsResponse,
-  allSeniorsResponse,
+  allSeniorsResponse, graham,
   mockFetch,
   oldAric,
   unmockFetch,
@@ -64,7 +64,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const rows = screen.getAllByRole('row')
 
@@ -86,7 +86,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const rows = screen.getAllByRole('row')
       expect(rows[1].textContent).toContain(`${youngAric.name.firstName} ${youngAric.name.lastName}`)
@@ -104,7 +104,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const minField = screen.getByLabelText<HTMLInputElement>('Min')
       const maxField = screen.getByLabelText<HTMLInputElement>('Max')
@@ -130,7 +130,7 @@ describe('Users Page', () => {
         <UsersPage></UsersPage>
       )
 
-      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+      await waitFor(() => expect(screen.getByText(`${graham.name.firstName} ${graham.name.lastName}`)).toBeVisible())
 
       const minField = screen.getByLabelText<HTMLInputElement>('Min')
       const maxField = screen.getByLabelText<HTMLInputElement>('Max')

@@ -1,25 +1,43 @@
 import {User} from "./models/user";
-import React from "react";
+import React, {useState} from "react";
+import {UsersTableFilters} from "./usersTableFilters";
+import {UserFilters, useUsers} from "./hooks/useUsers";
 
-export function UsersTable({users}: { users: User[] }) {
+interface UsersTableProps {
+}
+
+export function UsersTable() {
+  const [filters, setFilters] = useState<UserFilters>({age: {max: 100, min: 0}, textFilter: ""})
+  const {users, error, isLoading} = useUsers(filters)
+
   return (
-    <table>
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Age</th>
-      </tr>
-      </thead>
-      <tbody>
-      {
-        users.map(user => (
-          <tr key={user.uniqueId()}>
-            <td>{user.getFullName()}</td>
-            <td>{user.age}</td>
+    <div>
+      <UsersTableFilters onChange={setFilters}/>
+
+      {!isLoading && !error && (
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
           </tr>
-        ))
-      }
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+          {
+            users.map(user => (
+              <tr key={user.uniqueId()}>
+                <td>{user.getFullName()}</td>
+                <td>{user.age}</td>
+              </tr>
+            ))
+          }
+          </tbody>
+        </table>
+      )}
+
+      { isLoading && (
+        <strong>Loading...</strong>
+      )}
+    </div>
   );
 }

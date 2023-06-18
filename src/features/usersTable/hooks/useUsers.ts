@@ -20,10 +20,15 @@ export function useUsers(filters: UserFilters) {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(true)
+      setError(null)
+    }, 0)
+
     const fetchTask = fetcher.startFetchTask(filters)
 
     fetchTask.promise
+      .then((x) => new Promise<User[]>(res => setTimeout(() => res(x), 500)))
       .then(setUsers)
       .catch(setError)
       .finally(() => setIsLoading(false))
