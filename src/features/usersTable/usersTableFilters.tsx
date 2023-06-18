@@ -1,6 +1,9 @@
 import React, {useEffect, useId, useState} from "react";
 import {UserFilters} from "./hooks/useUsers";
 import {Sheet} from "../layout/sheet";
+import {Form} from "../layout/form/form";
+import {Input} from "../layout/form/input";
+import {Button} from "../layout/form/button";
 
 interface UsersTableFiltersProps {
   filters: UserFilters,
@@ -8,9 +11,6 @@ interface UsersTableFiltersProps {
 }
 
 export function UsersTableFilters({filters, onChange}: UsersTableFiltersProps) {
-  const minFieldId = useId();
-  const maxFieldId = useId();
-
   const [min, setMin] = useState(filters.age.min);
   const [max, setMax] = useState(filters.age.max);
 
@@ -26,23 +26,11 @@ export function UsersTableFilters({filters, onChange}: UsersTableFiltersProps) {
 
   return (
     <Sheet>
-      <label htmlFor={minFieldId}>Min</label>
-      <input
-        id={minFieldId}
-        name="minAge"
-        value={min}
-        onChange={event => setMin(parseInt(event.target.value))}
-        type="number"/>
-
-      <label htmlFor={maxFieldId}>Max</label>
-      <input
-        id={maxFieldId}
-        name="maxAge"
-        value={max}
-        onChange={event => setMax(parseInt(event.target.value))}
-        type="number"/>
-
-      <button onClick={handleRetrieveUsers} type="button">Retrieve Users</button>
+      <Form onSubmit={handleRetrieveUsers} rows={[
+        <Input label="Min" value={min.toString()} onChange={newValue => setMin(parseInt(newValue))} />,
+        <Input label="Max" value={max.toString()} onChange={newValue => setMax(parseInt(newValue))} />,
+        <Button type="submit">Retrieve Users</Button>
+      ]} />
     </Sheet>
   );
 }
