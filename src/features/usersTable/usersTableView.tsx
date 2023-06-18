@@ -55,6 +55,9 @@ export function UsersTableView({isLoading, error, users}: UsersTableViewProps) {
       {isLoading && (
         <strong>Loading...</strong>
       )}
+      {error && (
+        <strong>An error occurred</strong>
+      )}
     </Sheet>
   );
 }
