@@ -66,12 +66,12 @@ describe('Users Page', () => {
 
       await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
 
-      const tableNames = screen.getAllByRole('row')
+      const rows = screen.getAllByRole('row')
 
-      const numberOfHeaders = 1
-      const numberOfRows = 5
+      const expectedNumberOfHeaders = 1
+      const expectedNumberOfRows = 5
 
-      expect(tableNames.length).toBe(numberOfHeaders + numberOfRows)
+      expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows)
       expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
 
@@ -91,6 +91,61 @@ describe('Users Page', () => {
       const rows = screen.getAllByRole('row')
       expect(rows[1].textContent).toContain(`${youngAric.name.firstName} ${youngAric.name.lastName}`)
       expect(rows[2].textContent).toContain(`${oldAric.name.firstName} ${oldAric.name.lastName}`)
+    })
+
+    it('should not update the table or refresh the models when the form is changed', async () => {
+      mockedFetch.mockImplementation((url) => {
+        if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
+        if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
+        if (url.includes('users/seniors')) { return Promise.resolve(allSeniorsResponse) }
+      })
+
+      render(
+        <UsersPage></UsersPage>
+      )
+
+      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+
+      const minField = screen.getByLabelText<HTMLInputElement>('Min')
+      const maxField = screen.getByLabelText<HTMLInputElement>('Max')
+      await userEvent.type(minField, '99')
+      await userEvent.type(maxField, '999')
+
+      const rowsAfterChange = screen.getAllByRole('row')
+      const expectedNumberOfHeaders = 1
+      const expectedNumberOfRows = 5
+
+      expect(mockedFetch).toHaveBeenCalledTimes(3)
+      expect(rowsAfterChange.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows)
+    })
+
+    it('should update the table but not refresh the models when the form is submitted', async () => {
+      mockedFetch.mockImplementation((url) => {
+        if (url.includes('users/kids')) { return Promise.resolve(allKidsResponse) }
+        if (url.includes('users/adults')) { return Promise.resolve(allAdultsResponse) }
+        if (url.includes('users/seniors')) { return Promise.resolve(allSeniorsResponse) }
+      })
+
+      render(
+        <UsersPage></UsersPage>
+      )
+
+      await waitFor(() => expect(screen.getByText(`${youngAric.name.firstName} ${youngAric.name.lastName}`)).toBeVisible())
+
+      const minField = screen.getByLabelText<HTMLInputElement>('Min')
+      const maxField = screen.getByLabelText<HTMLInputElement>('Max')
+      const retrieveUsersButton = screen.getByRole<HTMLButtonElement>('button', {name: 'Retrieve Users'})
+
+      await userEvent.type(minField, '99')
+      await userEvent.type(maxField, '999')
+      await userEvent.click(retrieveUsersButton)
+
+      const rows = screen.getAllByRole('row')
+      const expectedNumberOfHeaders = 1
+      const expectedNumberOfRows = 0
+
+      await waitFor(() => expect(rows.length).toBe(expectedNumberOfHeaders + expectedNumberOfRows))
+      expect(mockedFetch).toHaveBeenCalledTimes(3)
     })
   })
 })
